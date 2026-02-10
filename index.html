@@ -14,7 +14,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: "Comic Sans MS", cursive;
+    font-family: "Times New Roman", Times, serif;
     overflow: hidden;
   }
 
@@ -130,19 +130,19 @@
 
   let i = 0;
 
-  // Start
+  // Start button
   startBtn.onclick = () => {
     navigator.vibrate?.(50);
     intro.classList.add("hidden");
     questionBox.classList.remove("hidden");
   };
 
-  // Move NO button + vibration
+  // NO button logic
   function moveNo() {
     question.textContent = msgs[Math.min(i, msgs.length - 1)];
     i++;
 
-    navigator.vibrate?.([100, 50, 100]); // dramatic vibration
+    navigator.vibrate?.([100, 50, 100]);
 
     const padding = 100;
     const maxX = window.innerWidth - padding;
@@ -151,20 +151,16 @@
     noBtn.style.left = Math.random() * maxX + "px";
     noBtn.style.top = Math.random() * maxY + "px";
 
-    if (i > 5) {
-      noBtn.style.transform = "scale(0.7)";
-    }
-    if (i > 6) {
-      noBtn.style.display = "none";
-    }
+    if (i > 5) noBtn.style.transform = "scale(0.7)";
+    if (i > 6) noBtn.style.display = "none";
   }
 
   noBtn.onmouseover = moveNo; // desktop
   noBtn.onclick = moveNo;     // mobile
 
-  // YES clicked
+  // YES button logic
   yesBtn.onclick = () => {
-    navigator.vibrate?.([200, 100, 200, 100, 300]); // happy vibration
+    navigator.vibrate?.([200, 100, 200, 100, 300]);
     questionBox.classList.add("hidden");
     celebration.classList.remove("hidden");
     hearts();
