@@ -2,11 +2,17 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Important Question 💖</title>
+<title>Important Question</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+  /* FORCE TIMES NEW ROMAN EVERYWHERE */
+  * {
+    font-family: "Times New Roman", Times, serif !important;
+    box-sizing: border-box;
+  }
+
   body {
     margin: 0;
     height: 100vh;
@@ -14,53 +20,46 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: "Times New Roman", Times, serif;
     overflow: hidden;
   }
 
   .box {
     text-align: center;
     padding: 30px;
+    width: 100%;
+    max-width: 420px;
   }
 
   h1 {
-    font-size: clamp(2rem, 6vw, 3rem);
+    font-size: clamp(2.2rem, 7vw, 3rem);
     color: #ff3b6f;
+    margin-bottom: 12px;
   }
 
   p {
-    font-size: clamp(1.1rem, 4vw, 1.3rem);
-    color: #444;
+    font-size: clamp(1.1rem, 4vw, 1.25rem);
+    color: #555;
+    margin-bottom: 20px;
   }
 
   button {
-    padding: 16px 36px;
+    padding: 16px 38px;
     font-size: 1.2rem;
     border: none;
     border-radius: 30px;
-    margin: 12px;
+    margin: 10px;
     cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  #start, #yes {
     background: #ff3b6f;
     color: white;
   }
 
   #no {
     background: #666;
-    color: white;
     position: absolute;
   }
 
   .hidden {
     display: none;
-  }
-
-  .celebrate h1 {
-    font-size: clamp(2.5rem, 8vw, 3.5rem);
-    color: #ff006e;
   }
 
   .heart {
@@ -72,12 +71,6 @@
   @keyframes float {
     from { transform: translateY(0); opacity: 1; }
     to { transform: translateY(-100vh); opacity: 0; }
-  }
-
-  @media (max-width: 600px) {
-    .box {
-      width: 90%;
-    }
   }
 </style>
 </head>
@@ -99,66 +92,55 @@
 </div>
 
 <!-- CELEBRATION -->
-<div class="box hidden celebrate" id="celebration">
+<div class="box hidden" id="celebration">
   <h1>YAYYYY 💖🎉</h1>
   <p>I knew it 😌</p>
-  <p>You just made my heart very happy 💕</p>
-  <p><b>Screenshot this & send it to me 😏📸</b></p>
+  <p>Screenshot this & send it to me 😏📸</p>
 </div>
 
 <script>
   const intro = document.getElementById("intro");
   const startBtn = document.getElementById("start");
-
   const questionBox = document.getElementById("questionBox");
   const question = document.getElementById("question");
-
   const yesBtn = document.getElementById("yes");
   const noBtn = document.getElementById("no");
-
   const celebration = document.getElementById("celebration");
 
   const msgs = [
     "Are you sure? 😳",
     "Think carefully… 🥺",
     "My heart is watching 💔",
-    "Even the universe says YES 🌌",
+    "Universe says YES 🌌",
     "Stop joking now 😭",
-    "No is having trust issues 😐",
-    "ERROR: No is unavailable ❌"
+    "No is unavailable ❌"
   ];
 
   let i = 0;
 
-  // Start button
   startBtn.onclick = () => {
     navigator.vibrate?.(50);
     intro.classList.add("hidden");
     questionBox.classList.remove("hidden");
   };
 
-  // NO button logic
   function moveNo() {
     question.textContent = msgs[Math.min(i, msgs.length - 1)];
     i++;
 
     navigator.vibrate?.([100, 50, 100]);
 
-    const padding = 100;
-    const maxX = window.innerWidth - padding;
-    const maxY = window.innerHeight - padding;
+    const padding = 120;
+    noBtn.style.left = Math.random() * (window.innerWidth - padding) + "px";
+    noBtn.style.top = Math.random() * (window.innerHeight - padding) + "px";
 
-    noBtn.style.left = Math.random() * maxX + "px";
-    noBtn.style.top = Math.random() * maxY + "px";
-
-    if (i > 5) noBtn.style.transform = "scale(0.7)";
-    if (i > 6) noBtn.style.display = "none";
+    if (i > 4) noBtn.style.transform = "scale(0.7)";
+    if (i > 5) noBtn.style.display = "none";
   }
 
-  noBtn.onmouseover = moveNo; // desktop
-  noBtn.onclick = moveNo;     // mobile
+  noBtn.onmouseover = moveNo;
+  noBtn.onclick = moveNo;
 
-  // YES button logic
   yesBtn.onclick = () => {
     navigator.vibrate?.([200, 100, 200, 100, 300]);
     questionBox.classList.add("hidden");
@@ -166,18 +148,15 @@
     hearts();
   };
 
-  // Hearts animation
   function hearts() {
     for (let i = 0; i < 30; i++) {
-      const heart = document.createElement("div");
-      heart.className = "heart";
-      heart.textContent = "💖";
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.bottom = "-20px";
-      heart.style.animationDuration = (2 + Math.random() * 3) + "s";
-      document.body.appendChild(heart);
-
-      setTimeout(() => heart.remove(), 4000);
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = "💖";
+      h.style.left = Math.random() * 100 + "vw";
+      h.style.bottom = "-20px";
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 4000);
     }
   }
 </script>
