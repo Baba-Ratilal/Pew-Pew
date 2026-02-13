@@ -2,241 +2,260 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Important Question</title>
+<title>A Special Question</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <style>
+  :root {
+    --primary: #ff3b6f;
+    --bg-grad: linear-gradient(135deg, #ffd6e0 0%, #c8f7ff 100%);
+    --glass: rgba(255, 255, 255, 0.4);
+  }
+
   * {
     font-family: "Times New Roman", Times, serif !important;
     box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent; /* Removes the grey box on tap in iOS */
+    -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
   }
 
   body {
     margin: 0;
-    /* Use dvh for iOS Safari to account for the address bar */
-    height: 100vh;
     height: 100dvh;
     width: 100vw;
-    background: linear-gradient(135deg, #ffd6e0, #c8f7ff);
+    background: var(--bg-grad);
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    position: relative;
-    position: fixed; /* Extra layer of protection against scrolling on iOS */
+    position: fixed;
   }
 
+  /* Main Container */
   .box {
     text-align: center;
-    padding: 20px;
-    width: 90%;
-    max-width: 400px;
-    z-index: 5;
-    /* Soft transition between states */
-    transition: opacity 0.5s ease;
+    padding: 30px 20px;
+    width: 85%;
+    max-width: 350px;
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 30px;
+    border: 1px solid rgba(255,255,255,0.5);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    z-index: 10;
+  }
+
+  /* Dedicated GIF Area to prevent overlapping */
+  .gif-stage {
+    width: 100%;
+    min-height: 160px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
   }
 
   .tenor-gif-embed {
-    max-width: 180px !important;
-    margin: 0 auto 15px auto !important;
+    width: 150px !important;
     border-radius: 15px;
     overflow: hidden;
-    /* Fix for iOS clipping rounded corners on embeds */
-    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   }
 
   h1 {
-    font-size: clamp(1.8rem, 8vw, 2.5rem);
-    color: #ff3b6f;
-    margin: 0 0 10px 0;
+    font-size: 1.8rem;
+    color: var(--primary);
+    margin: 10px 0;
     line-height: 1.2;
+    text-shadow: 1px 1px 0px white;
   }
 
   p {
     font-size: 1.1rem;
-    color: #555;
-    margin-bottom: 20px;
+    color: #666;
+    margin-bottom: 25px;
   }
 
-  .btn-container {
+  /* Button Logic */
+  .btn-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
-    min-height: 120px; /* More breathing room for growth */
+    gap: 15px;
+    margin-top: 20px;
+    position: relative;
+    min-height: 60px;
   }
 
   button {
-    padding: 16px 32px;
-    font-size: 16px; /* 16px is the magic number to stop iOS auto-zoom */
+    padding: 15px 30px;
+    font-size: 16px;
     border: none;
-    border-radius: 35px;
+    border-radius: 50px;
     cursor: pointer;
-    background: #ff3b6f;
+    background: var(--primary);
     color: white;
     font-weight: bold;
-    box-shadow: 0 4px 15px rgba(255, 59, 111, 0.3);
-    /* Performance fix for CSS animations on mobile */
-    will-change: transform;
+    box-shadow: 0 5px 15px rgba(255, 59, 111, 0.3);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 11;
   }
 
   #no {
-    background: #666;
-    position: absolute;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: left 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
-                top 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
-                transform 0.2s;
+    background: #888;
+    position: fixed; /* Fixed to viewport to stay visible */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    z-index: 12;
   }
 
   .hidden { display: none !important; }
 
-  /* Smooth heart animation */
+  /* Hearts Animation */
   .heart {
     position: absolute;
-    font-size: 1.5rem;
-    z-index: 1;
     pointer-events: none;
-    animation: float 4s linear forwards;
+    z-index: 1;
+    animation: floatUp 4s linear forwards;
   }
 
-  @keyframes float {
-    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(-110dvh) rotate(360deg); opacity: 0; }
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-110dvh) scale(1.5); opacity: 0; }
   }
 </style>
 </head>
-
 <body>
 
-<div class="box" id="intro">
-  <div class="tenor-gif-embed" data-postid="22532913" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%">
-    <a href="https://tenor.com/view/beluga-the-cat-hakosh1307-hakosh-beluga-cat-hug-gif-22532913">Beluga Cat</a>
-  </div>
-  <h1>Hey… 🥺</h1>
-  <p>I need to ask you something very important 💗</p>
-  <button id="start">Okay 🫶</button>
-</div>
-
-<div class="box hidden" id="questionBox">
-  <div id="gif-knife" class="hidden">
-    <div class="tenor-gif-embed" data-postid="6447555532574214775" data-share-method="host" data-aspect-ratio="1" data-width="100%"><a href="https://tenor.com/view/peach-and-goma-peach-mitao-cat-angry-knife-cat-gif-6447555532574214775">Knife Cat</a></div>
+  <div class="box" id="intro">
+    <div class="gif-stage">
+      <div class="tenor-gif-embed" data-postid="22532913" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"></div>
+    </div>
+    <h1>Hey… 🥺</h1>
+    <p>I need to ask you something very important 💗</p>
+    <button id="start">Okay 🫶</button>
   </div>
 
-  <div id="gif-shake" class="hidden">
-    <div class="tenor-gif-embed" data-postid="12413317499980731043" data-share-method="host" data-aspect-ratio="1.29016" data-width="100%"><a href="https://tenor.com/view/peach-peach-goma-peach-and-goma-shake-shaking-gif-12413317499980731043">Shaking Cat</a></div>
+  <div class="box hidden" id="questionBox">
+    <div class="gif-stage">
+      <div id="g-knife" class="tenor-gif-embed hidden" data-postid="6447555532574214775" data-share-method="host" data-aspect-ratio="1" data-width="100%"></div>
+      <div id="g-shake" class="tenor-gif-embed hidden" data-postid="12413317499980731043" data-share-method="host" data-aspect-ratio="1.29016" data-width="100%"></div>
+      <div id="g-break" class="tenor-gif-embed hidden" data-postid="12177904528014688220" data-share-method="host" data-aspect-ratio="1.04018" data-width="100%"></div>
+    </div>
+    
+    <h1 id="question">Do you love me? 💖</h1>
+    
+    <div class="btn-wrapper">
+      <button id="yes">Yes 💕</button>
+      <button id="no">No 🙄</button>
+    </div>
   </div>
 
-  <div id="gif-breakdown" class="hidden">
-    <div class="tenor-gif-embed" data-postid="12177904528014688220" data-share-method="host" data-aspect-ratio="1.04018" data-width="100%"><a href="https://tenor.com/view/peach-goma-gif-12177904528014688220">Crying Cat</a></div>
+  <div class="box hidden" id="celebration">
+    <div class="gif-stage">
+      <div class="tenor-gif-embed" data-postid="11975191960342404712" data-share-method="host" data-aspect-ratio="1.10667" data-width="100%"></div>
+    </div>
+    <h1>YAYYYY 💖🎉</h1>
+    <p>I knew it 😌</p>
+    <p>Screenshot this & send it to me 😏📸</p>
   </div>
 
-  <h1 id="question">Do you love me? 💖</h1>
-  
-  <div class="btn-container">
-    <button id="yes">Yes 💕</button>
-    <button id="no">No 🙄</button>
-  </div>
-</div>
+  <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
 
-<div class="box hidden" id="celebration">
-  <div class="tenor-gif-embed" data-postid="11975191960342404712" data-share-method="host" data-aspect-ratio="1.10667" data-width="100%"><a href="https://tenor.com/view/peach-goma-peach-and-goma-peach-peach-cat-sparkle-gif-11975191960342404712">Sparkle Cat</a></div>
-  <h1>YAYYYY 💖🎉</h1>
-  <p>I knew it 😌</p>
-  <p>Screenshot this & send it to me 😏📸</p>
-</div>
+  <script>
+    const startBtn = document.getElementById("start");
+    const intro = document.getElementById("intro");
+    const questionBox = document.getElementById("questionBox");
+    const celebration = document.getElementById("celebration");
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+    const questionText = document.getElementById("question");
 
-<script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+    const gKnife = document.getElementById("g-knife");
+    const gShake = document.getElementById("g-shake");
+    const gBreak = document.getElementById("g-break");
 
-<script>
-  const intro = document.getElementById("intro");
-  const startBtn = document.getElementById("start");
-  const questionBox = document.getElementById("questionBox");
-  const question = document.getElementById("question");
-  const gKnife = document.getElementById("gif-knife");
-  const gShake = document.getElementById("gif-shake");
-  const gBreak = document.getElementById("gif-breakdown");
-  const yesBtn = document.getElementById("yes");
-  const noBtn = document.getElementById("no");
-  const celebration = document.getElementById("celebration");
+    const msgs = ["Are you sure? 😳", "Think carefully… 🥺", "My heart is watching 💔", "Stop joking now 😭", "No is unavailable ❌"];
+    let count = 0;
 
-  const msgs = ["Are you sure? 😳", "Think carefully… 🥺", "My heart is watching 💔", "Stop joking now 😭", "No is unavailable ❌"];
-  let i = 0;
+    // Trigger vibration helper
+    function shakePhone() {
+      if (navigator.vibrate) {
+        navigator.vibrate([50, 30, 50]);
+      }
+    }
 
-  startBtn.onclick = () => {
-    intro.style.opacity = "0";
-    setTimeout(() => {
+    startBtn.onclick = () => {
+      shakePhone();
       intro.classList.add("hidden");
       questionBox.classList.remove("hidden");
-      noBtn.style.position = "absolute";
-    }, 300);
-  };
+      // Pre-position No button
+      const rect = noBtn.getBoundingClientRect();
+      noBtn.style.top = rect.top + "px";
+      noBtn.style.left = rect.left + "px";
+    };
 
-  function moveNo() {
-    question.textContent = msgs[Math.min(i, msgs.length - 1)];
-    
-    if (i === 0) { gKnife.classList.remove("hidden"); }
-    else if (i === 1) { gKnife.classList.add("hidden"); gShake.classList.remove("hidden"); }
-    else if (i === 3) { gShake.classList.add("hidden"); gBreak.classList.remove("hidden"); }
+    function moveNo() {
+      shakePhone();
+      questionText.textContent = msgs[Math.min(count, msgs.length - 1)];
+      
+      // GIF Logic
+      if (count === 0) { gKnife.classList.remove("hidden"); }
+      if (count === 1) { gKnife.classList.add("hidden"); gShake.classList.remove("hidden"); }
+      if (count === 3) { gShake.classList.add("hidden"); gBreak.classList.remove("hidden"); }
 
-    i++;
-    
-    // Safely attempt vibration
-    try { if(navigator.vibrate) navigator.vibrate(50); } catch(e) {}
+      count++;
 
-    // iOS safe boundary logic
-    const padding = 30;
-    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+      // iOS Safe Movement Logic
+      const padding = 50;
+      const safeZone = yesBtn.getBoundingClientRect();
+      
+      let newX, newY;
+      
+      // Avoid spawning No button on top of Yes button
+      do {
+        newX = Math.random() * (window.innerWidth - padding * 2) + padding;
+        newY = Math.random() * (window.innerHeight - padding * 2) + padding;
+      } while (
+        newX > safeZone.left - 50 && 
+        newX < safeZone.right + 50 && 
+        newY > safeZone.top - 50 && 
+        newY < safeZone.bottom + 50
+      );
 
-    const randomX = Math.max(padding, Math.random() * maxX);
-    const randomY = Math.max(padding, Math.random() * maxY);
+      noBtn.style.left = newX + "px";
+      noBtn.style.top = newY + "px";
 
-    noBtn.style.left = `${randomX}px`;
-    noBtn.style.top = `${randomY}px`;
+      // Scale Yes button
+      const scale = Math.min(1 + count * 0.2, 2.0);
+      yesBtn.style.transform = `scale(${scale})`;
 
-    // Progressive scaling for Yes button
-    const scale = Math.min(1 + i * 0.18, 2.2);
-    yesBtn.style.transform = `scale(${scale})`;
+      if (count > 6) noBtn.style.display = "none";
+    }
 
-    if (i > 6) noBtn.style.display = "none";
-  }
+    noBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      moveNo();
+    });
+    noBtn.onmouseover = moveNo;
 
-  // Handle both touch and mouse for the 'No' button
-  noBtn.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    moveNo();
-  });
-  noBtn.addEventListener('mouseover', moveNo);
-
-  yesBtn.onclick = () => {
-    questionBox.style.opacity = "0";
-    setTimeout(() => {
+    yesBtn.onclick = () => {
+      shakePhone();
       questionBox.classList.add("hidden");
       celebration.classList.remove("hidden");
-      createHearts();
-    }, 300);
-  };
-
-  function createHearts() {
-    const heartInterval = setInterval(() => {
-      const h = document.createElement("div");
-      h.className = "heart";
-      h.textContent = "💖";
-      h.style.left = Math.random() * 100 + "vw";
-      h.style.bottom = "-20px";
-      h.style.fontSize = (Math.random() * 20 + 15) + "px";
-      document.body.appendChild(h);
       
-      setTimeout(() => h.remove(), 4000);
-    }, 150);
-
-    // Stop generating after 5 seconds to save battery
-    setTimeout(() => clearInterval(heartInterval), 5000);
-  }
-</script>
-
+      // Heart rain
+      setInterval(() => {
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.innerHTML = "💖";
+        h.style.left = Math.random() * 100 + "vw";
+        h.style.bottom = "-20px";
+        h.style.fontSize = Math.random() * 20 + 20 + "px";
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 4000);
+      }, 200);
+    };
+  </script>
 </body>
 </html>
