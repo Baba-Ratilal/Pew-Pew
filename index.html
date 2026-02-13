@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Important Question</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -30,6 +29,17 @@
     max-width: 420px;
   }
 
+  /* GIF Styling */
+  .mood-gif {
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
+    border-radius: 20px;
+    margin-bottom: 15px;
+    /* Optional: subtle shadow for depth */
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
+  }
+
   h1 {
     font-size: clamp(2.2rem, 7vw, 3rem);
     color: #ff3b6f;
@@ -51,20 +61,23 @@
     cursor: pointer;
     background: #ff3b6f;
     color: white;
+    transition: transform 0.2s ease;
   }
 
   #no {
     background: #666;
     position: absolute;
+    z-index: 10;
   }
 
   .hidden {
-    display: none;
+    display: none !important;
   }
 
   .heart {
     position: absolute;
     font-size: 2rem;
+    z-index: -1;
     animation: float 4s linear infinite;
   }
 
@@ -77,22 +90,22 @@
 
 <body>
 
-<!-- INTRO -->
 <div class="box" id="intro">
+  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3eHpkZzR2eHpxbm94eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnB0PWEmZW1mPTAmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PXM/m8f9sh8I7F5tO6Jm6t/giphy.gif" class="mood-gif" alt="Cute wave">
   <h1>Hey… 🥺</h1>
   <p>I need to ask you something very important 💗</p>
   <button id="start">Okay 🫶</button>
 </div>
 
-<!-- QUESTION -->
 <div class="box hidden" id="questionBox">
+  <img id="moodGif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3eHpkZzR2eHpxbm94eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnB0PWEmZW1mPTAmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PXM/m8f9sh8I7F5tO6Jm6t/giphy.gif" class="mood-gif" alt="Thinking">
   <h1 id="question">Do you love me? 💖</h1>
   <button id="yes">Yes 💕</button>
   <button id="no">No 🙄</button>
 </div>
 
-<!-- CELEBRATION -->
 <div class="box hidden" id="celebration">
+  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnZic2Z3eHpkZzR2eHpxbm94eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnB0PWEmZW1mPTAmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PXM/c77vV9vVvVvVvVvVvV/giphy.gif" class="mood-gif" alt="Happy">
   <h1>YAYYYY 💖🎉</h1>
   <p>I knew it 😌</p>
   <p>Screenshot this & send it to me 😏📸</p>
@@ -103,6 +116,7 @@
   const startBtn = document.getElementById("start");
   const questionBox = document.getElementById("questionBox");
   const question = document.getElementById("question");
+  const moodGif = document.getElementById("moodGif");
   const yesBtn = document.getElementById("yes");
   const noBtn = document.getElementById("no");
   const celebration = document.getElementById("celebration");
@@ -116,6 +130,12 @@
     "No is unavailable ❌"
   ];
 
+  const sadGifs = [
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3eHpkZzR2eHpxbm94eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnB0PWEmZW1mPTAmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PXM/m8f9sh8I7F5tO6Jm6t/giphy.gif", // Pleading
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNXA3eHpwZzR2eHpxbm94eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnB0PWEmZW1mPTAmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PXM/OPWNcr42GEvMk/giphy.gif", // Crying
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnYxeHpwZzR2eHpxbm94eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnB0PWEmZW1mPTAmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PXM/3o7TKVUn7iM8FMEU24/giphy.gif"  // Very Sad
+  ];
+
   let i = 0;
 
   startBtn.onclick = () => {
@@ -125,17 +145,28 @@
   };
 
   function moveNo() {
+    // Update text
     question.textContent = msgs[Math.min(i, msgs.length - 1)];
+    
+    // Switch GIFs as they keep clicking No
+    if (i === 1) moodGif.src = sadGifs[1]; // Start crying
+    if (i === 3) moodGif.src = sadGifs[2]; // Throw a tantrum
+    
     i++;
 
     navigator.vibrate?.([100, 50, 100]);
 
+    // Move button to random location
     const padding = 120;
-    noBtn.style.left = Math.random() * (window.innerWidth - padding) + "px";
-    noBtn.style.top = Math.random() * (window.innerHeight - padding) + "px";
+    const x = Math.random() * (window.innerWidth - padding);
+    const y = Math.random() * (window.innerHeight - padding);
+    
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
 
+    // Shrink button
     if (i > 4) noBtn.style.transform = "scale(0.7)";
-    if (i > 5) noBtn.style.display = "none";
+    if (i > 5) noBtn.style.display = "none"; // Vanish!
   }
 
   noBtn.onmouseover = moveNo;
@@ -149,12 +180,13 @@
   };
 
   function hearts() {
-    for (let i = 0; i < 30; i++) {
+    for (let j = 0; j < 30; j++) {
       const h = document.createElement("div");
       h.className = "heart";
       h.textContent = "💖";
       h.style.left = Math.random() * 100 + "vw";
       h.style.bottom = "-20px";
+      h.style.animationDelay = Math.random() * 2 + "s";
       document.body.appendChild(h);
       setTimeout(() => h.remove(), 4000);
     }
