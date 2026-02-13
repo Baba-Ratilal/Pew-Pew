@@ -56,7 +56,7 @@
 
   /* --- GLASS CARD (iOS Style) --- */
   .card {
-    background: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(30px) saturate(180%);
     -webkit-backdrop-filter: blur(30px) saturate(180%);
     border-radius: 32px;
@@ -64,7 +64,7 @@
     max-width: 380px;
     padding: 36px 28px;
     text-align: center;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.6);
     padding-bottom: max(36px, env(safe-area-inset-bottom));
     transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
@@ -113,13 +113,14 @@
     border-radius: 16px;
     border: none;
     background: var(--input-bg);
-    font-size: 17px; /* Matches iOS default to prevent zoom */
+    font-size: 17px; /* Matches iOS default */
     color: var(--text-main);
     margin-bottom: 16px;
     text-align: center;
     outline: none;
     transition: background 0.2s;
-    user-select: text; /* Allow typing */
+    user-select: text;
+    -webkit-user-select: text;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
   }
 
@@ -150,6 +151,7 @@
     border: none;
     cursor: pointer;
     transition: transform 0.2s, opacity 0.2s;
+    -webkit-appearance: none; /* iOS Reset */
   }
 
   .btn-primary {
@@ -165,6 +167,11 @@
     color: #000;
     position: relative;
     z-index: 100;
+    transition: top 0.3s, left 0.3s; 
+  }
+
+  .btn-locked {
+    opacity: 1; 
   }
 
   /* Flying NO button */
@@ -204,7 +211,16 @@
 
   <div class="mesh-bg"></div>
 
-  <div class="card" id="pass-view">
+  <div class="card" id="intro-view">
+    <div class="media-container">
+      <div class="tenor-gif-embed" data-postid="22532913" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"></div>
+    </div>
+    <h1>Hey... 🥺</h1>
+    <p>I have a very important question for you.</p>
+    <button class="btn-primary" onclick="goToPass()">Open Message 💌</button>
+  </div>
+
+  <div class="card hidden" id="pass-view">
     <div style="font-size: 50px; margin-bottom: 20px;">🔒</div>
     <h1>Security Check</h1>
     <p>This message is locked. To open it, answer this:</p>
@@ -212,15 +228,6 @@
     
     <input type="text" id="pass-input" placeholder="Type here..." autocomplete="off">
     <button class="btn-primary" onclick="checkPass()">Unlock Message</button>
-  </div>
-
-  <div class="card hidden" id="intro-view">
-    <div class="media-container">
-      <div class="tenor-gif-embed" data-postid="22532913" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"></div>
-    </div>
-    <h1>Hey... 🥺</h1>
-    <p>Access Granted. I have a very important question for you.</p>
-    <button class="btn-primary" onclick="goToQuestion()">Read Question</button>
   </div>
 
   <div class="card hidden" id="question-view">
@@ -235,7 +242,7 @@
 
     <div class="actions">
       <button class="btn-primary" id="yes-btn" onclick="goToSuccess()">Yes</button>
-      <button class="btn-secondary" id="no-btn">No</button>
+      <button class="btn-secondary btn-locked" id="no-btn">No</button>
     </div>
   </div>
 
@@ -252,8 +259,8 @@
   <script>
     // --- ELEMENTS ---
     const views = {
-      pass: document.getElementById('pass-view'),
       intro: document.getElementById('intro-view'),
+      pass: document.getElementById('pass-view'),
       question: document.getElementById('question-view'),
       success: document.getElementById('success-view')
     };
@@ -266,17 +273,34 @@
     let stage = 0;
     const messages = ["Are you sure? 😳", "Think again... 🥺", "Last chance 💔", "Don't do this 😭"];
 
-    // --- PASSWORD LOGIC ---
+    // --- NAVIGATION ---
+    
+    // 1. Intro -> Password
+    function goToPass() {
+      views.intro.classList.add('hidden');
+      views.pass.classList.remove('hidden');
+      // Small delay to allow CSS transition before focusing
+      setTimeout(() => passInput.focus(), 100);
+    }
+
+    // 2. Password -> Question
     function checkPass() {
       const answer = passInput.value.trim().toLowerCase();
       
       if (answer === "h2r") {
-        // Success
-        passInput.blur(); // Hide keyboard
+        passInput.blur(); 
         views.pass.classList.add('hidden');
-        views.intro.classList.remove('hidden');
+        views.question.classList.remove('hidden');
+        
+        // Show the first GIF (Knife)
+        gifs.g1.classList.remove('hidden');
+
+        // BUG FIX: 1-second lock on NO button to prevent accidental clicks
+        setTimeout(() => {
+          btns.no.classList.remove('btn-locked');
+        }, 1000);
+
       } else {
-        // Fail
         views.pass.classList.add('error-shake');
         passInput.style.border = "1px solid #FF3B30";
         if(navigator.vibrate) navigator.vibrate(200);
@@ -288,55 +312,56 @@
       }
     }
 
-    // Allow Enter key
     passInput.addEventListener("keypress", function(event) {
       if (event.key === "Enter") checkPass();
     });
 
-    // --- NAVIGATION ---
-    function goToQuestion() {
-      views.intro.classList.add('hidden');
-      views.question.classList.remove('hidden');
-      gifs.g1.classList.remove('hidden');
-    }
-
-    function goToSuccess() {
-      views.question.classList.add('hidden');
-      views.success.classList.remove('hidden');
-      createHearts();
-    }
-
-    // --- NO BUTTON LOGIC ---
+    // 3. Question Logic
     function handleNo(e) {
+      // Prevent "Ghost Clicks" if button is locked
+      if (btns.no.classList.contains('btn-locked')) return;
       if(e.type === 'touchstart') e.preventDefault();
 
-      // Visual Haptic
+      // Shake the card (Visual Haptic)
       views.question.classList.remove('error-shake');
       void views.question.offsetWidth;
       views.question.classList.add('error-shake');
       if (navigator.vibrate) navigator.vibrate(50);
 
+      // Update Text
       texts.title.innerText = messages[Math.min(stage, messages.length - 1)];
       texts.desc.innerText = "Wrong button! 🙄";
 
-      if (stage === 1) { gifs.g1.classList.add('hidden'); gifs.g2.classList.remove('hidden'); }
-      if (stage === 3) { gifs.g2.classList.add('hidden'); gifs.g3.classList.remove('hidden'); }
+      // --- GIF STAGE LOGIC (Matches your 3 GIFs) ---
+      // Stage 0 (Default): Knife (g1) is already visible
+      // Click 1 -> Stage 1: Show Shake (g2)
+      if (stage === 0) { 
+        gifs.g1.classList.add('hidden'); 
+        gifs.g2.classList.remove('hidden'); 
+      }
+      // Click 2 -> Stage 2: Show Cry (g3)
+      if (stage === 1) { 
+        gifs.g2.classList.add('hidden'); 
+        gifs.g3.classList.remove('hidden'); 
+      }
 
       stage++;
 
-      // Float Away Logic
+      // Make No button float away
       btns.no.classList.add('flying');
       
       const padding = 20;
       const yesRect = btns.yes.getBoundingClientRect();
+      const maxX = window.innerWidth - 100;
+      const maxY = window.innerHeight - 60;
+      
       let x, y;
 
-      // Find safe spot
+      // Try to find a spot that doesn't overlap YES button
       for(let i=0; i<50; i++) {
-        x = Math.random() * (window.innerWidth - 100) + 20;
-        y = Math.random() * (window.innerHeight - 60) + 20;
+        x = Math.random() * maxX + 20;
+        y = Math.random() * maxY + 20;
 
-        // Collision Check
         if (
           x < yesRect.right + 30 && 
           x + 80 > yesRect.left - 30 && 
@@ -354,13 +379,21 @@
       const scale = 1 + (stage * 0.2);
       btns.yes.style.transform = `scale(${scale})`;
       
+      // Hide No button after 5 attempts
       if (stage > 5) btns.no.style.display = 'none';
     }
 
     btns.no.addEventListener('touchstart', handleNo);
     btns.no.addEventListener('mouseover', handleNo);
+    btns.no.addEventListener('click', handleNo);
 
-    // --- CELEBRATION ---
+    // 4. Success
+    function goToSuccess() {
+      views.question.classList.add('hidden');
+      views.success.classList.remove('hidden');
+      createHearts();
+    }
+
     function createHearts() {
       setInterval(() => {
         const heart = document.createElement('div');
