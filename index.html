@@ -9,12 +9,15 @@
   * {
     font-family: "Times New Roman", Times, serif !important;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent; /* Removes the grey box on tap in iOS */
     touch-action: manipulation;
   }
 
   body {
     margin: 0;
+    /* Use dvh for iOS Safari to account for the address bar */
     height: 100vh;
+    height: 100dvh;
     width: 100vw;
     background: linear-gradient(135deg, #ffd6e0, #c8f7ff);
     display: flex;
@@ -22,6 +25,7 @@
     align-items: center;
     overflow: hidden;
     position: relative;
+    position: fixed; /* Extra layer of protection against scrolling on iOS */
   }
 
   .box {
@@ -30,6 +34,8 @@
     width: 90%;
     max-width: 400px;
     z-index: 5;
+    /* Soft transition between states */
+    transition: opacity 0.5s ease;
   }
 
   .tenor-gif-embed {
@@ -37,12 +43,15 @@
     margin: 0 auto 15px auto !important;
     border-radius: 15px;
     overflow: hidden;
+    /* Fix for iOS clipping rounded corners on embeds */
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
   }
 
   h1 {
     font-size: clamp(1.8rem, 8vw, 2.5rem);
     color: #ff3b6f;
-    margin-bottom: 10px;
+    margin: 0 0 10px 0;
+    line-height: 1.2;
   }
 
   p {
@@ -55,39 +64,47 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    min-height: 100px;
+    gap: 12px;
+    min-height: 120px; /* More breathing room for growth */
   }
 
   button {
-    padding: 14px 30px;
-    font-size: 1.1rem;
+    padding: 16px 32px;
+    font-size: 16px; /* 16px is the magic number to stop iOS auto-zoom */
     border: none;
-    border-radius: 30px;
+    border-radius: 35px;
     cursor: pointer;
     background: #ff3b6f;
     color: white;
-    transition: transform 0.2s ease;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(255, 59, 111, 0.3);
+    /* Performance fix for CSS animations on mobile */
+    will-change: transform;
   }
 
   #no {
     background: #666;
     position: absolute;
-    transition: all 0.15s ease-out;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: left 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                top 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                transform 0.2s;
   }
 
   .hidden { display: none !important; }
 
+  /* Smooth heart animation */
   .heart {
     position: absolute;
     font-size: 1.5rem;
     z-index: 1;
-    animation: float 4s linear infinite;
+    pointer-events: none;
+    animation: float 4s linear forwards;
   }
 
   @keyframes float {
-    from { transform: translateY(0); opacity: 1; }
-    to { transform: translateY(-110vh); opacity: 0; }
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(-110dvh) rotate(360deg); opacity: 0; }
   }
 </style>
 </head>
@@ -96,7 +113,7 @@
 
 <div class="box" id="intro">
   <div class="tenor-gif-embed" data-postid="22532913" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%">
-    <a href="https://tenor.com/view/beluga-the-cat-hakosh1307-hakosh-beluga-cat-hug-gif-22532913">Beluga Cat Hug</a>
+    <a href="https://tenor.com/view/beluga-the-cat-hakosh1307-hakosh-beluga-cat-hug-gif-22532913">Beluga Cat</a>
   </div>
   <h1>Hey… 🥺</h1>
   <p>I need to ask you something very important 💗</p>
@@ -104,23 +121,16 @@
 </div>
 
 <div class="box hidden" id="questionBox">
-  
   <div id="gif-knife" class="hidden">
-    <div class="tenor-gif-embed" data-postid="6447555532574214775" data-share-method="host" data-aspect-ratio="1" data-width="100%">
-      <a href="https://tenor.com/view/peach-and-goma-mitao-cat-angry-knife-cat-gif-6447555532574214775">Knife Cat</a>
-    </div>
+    <div class="tenor-gif-embed" data-postid="6447555532574214775" data-share-method="host" data-aspect-ratio="1" data-width="100%"><a href="https://tenor.com/view/peach-and-goma-peach-mitao-cat-angry-knife-cat-gif-6447555532574214775">Knife Cat</a></div>
   </div>
 
   <div id="gif-shake" class="hidden">
-    <div class="tenor-gif-embed" data-postid="12413317499980731043" data-share-method="host" data-aspect-ratio="1.29016" data-width="100%">
-      <a href="https://tenor.com/view/peach-peach-goma-shake-shaking-gif-12413317499980731043">Shaking Cat</a>
-    </div>
+    <div class="tenor-gif-embed" data-postid="12413317499980731043" data-share-method="host" data-aspect-ratio="1.29016" data-width="100%"><a href="https://tenor.com/view/peach-peach-goma-peach-and-goma-shake-shaking-gif-12413317499980731043">Shaking Cat</a></div>
   </div>
 
   <div id="gif-breakdown" class="hidden">
-    <div class="tenor-gif-embed" data-postid="12177904528014688220" data-share-method="host" data-aspect-ratio="1.04018" data-width="100%">
-      <a href="https://tenor.com/view/peach-goma-sticker-gif-12177904528014688220">Crying Cat</a>
-    </div>
+    <div class="tenor-gif-embed" data-postid="12177904528014688220" data-share-method="host" data-aspect-ratio="1.04018" data-width="100%"><a href="https://tenor.com/view/peach-goma-gif-12177904528014688220">Crying Cat</a></div>
   </div>
 
   <h1 id="question">Do you love me? 💖</h1>
@@ -132,9 +142,7 @@
 </div>
 
 <div class="box hidden" id="celebration">
-  <div class="tenor-gif-embed" data-postid="11975191960342404712" data-share-method="host" data-aspect-ratio="1.10667" data-width="100%">
-    <a href="https://tenor.com/view/peach-goma-sparkle-gif-11975191960342404712">Sparkle Cat</a>
-  </div>
+  <div class="tenor-gif-embed" data-postid="11975191960342404712" data-share-method="host" data-aspect-ratio="1.10667" data-width="100%"><a href="https://tenor.com/view/peach-goma-peach-and-goma-peach-peach-cat-sparkle-gif-11975191960342404712">Sparkle Cat</a></div>
   <h1>YAYYYY 💖🎉</h1>
   <p>I knew it 😌</p>
   <p>Screenshot this & send it to me 😏📸</p>
@@ -147,78 +155,86 @@
   const startBtn = document.getElementById("start");
   const questionBox = document.getElementById("questionBox");
   const question = document.getElementById("question");
-  
   const gKnife = document.getElementById("gif-knife");
   const gShake = document.getElementById("gif-shake");
   const gBreak = document.getElementById("gif-breakdown");
-
   const yesBtn = document.getElementById("yes");
   const noBtn = document.getElementById("no");
   const celebration = document.getElementById("celebration");
 
-  const msgs = ["Are you sure? 😳", "Think carefully… 🥺", "My heart is watching 💔", "Universe says YES 🌌", "Stop joking now 😭", "No is unavailable ❌"];
+  const msgs = ["Are you sure? 😳", "Think carefully… 🥺", "My heart is watching 💔", "Stop joking now 😭", "No is unavailable ❌"];
   let i = 0;
 
   startBtn.onclick = () => {
-    intro.classList.add("hidden");
-    questionBox.classList.remove("hidden");
-    noBtn.style.position = "absolute";
+    intro.style.opacity = "0";
+    setTimeout(() => {
+      intro.classList.add("hidden");
+      questionBox.classList.remove("hidden");
+      noBtn.style.position = "absolute";
+    }, 300);
   };
 
   function moveNo() {
     question.textContent = msgs[Math.min(i, msgs.length - 1)];
     
-    if (i === 0) {
-      gKnife.classList.remove("hidden");
-    } else if (i === 1) {
-      gKnife.classList.add("hidden");
-      gShake.classList.remove("hidden");
-    } else if (i === 4) {
-      gShake.classList.add("hidden");
-      gBreak.classList.remove("hidden");
-    }
+    if (i === 0) { gKnife.classList.remove("hidden"); }
+    else if (i === 1) { gKnife.classList.add("hidden"); gShake.classList.remove("hidden"); }
+    else if (i === 3) { gShake.classList.add("hidden"); gBreak.classList.remove("hidden"); }
 
     i++;
-    navigator.vibrate?.([50, 50]);
+    
+    // Safely attempt vibration
+    try { if(navigator.vibrate) navigator.vibrate(50); } catch(e) {}
 
-    const padding = 20;
+    // iOS safe boundary logic
+    const padding = 30;
     const maxX = window.innerWidth - noBtn.offsetWidth - padding;
     const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
     const randomX = Math.max(padding, Math.random() * maxX);
     const randomY = Math.max(padding, Math.random() * maxY);
 
-    noBtn.style.left = randomX + "px";
-    noBtn.style.top = randomY + "px";
+    noBtn.style.left = `${randomX}px`;
+    noBtn.style.top = `${randomY}px`;
 
-    yesBtn.style.transform = `scale(${Math.min(1 + i * 0.2, 2.5)})`;
+    // Progressive scaling for Yes button
+    const scale = Math.min(1 + i * 0.18, 2.2);
+    yesBtn.style.transform = `scale(${scale})`;
 
     if (i > 6) noBtn.style.display = "none";
   }
 
-  noBtn.addEventListener('mouseover', moveNo);
+  // Handle both touch and mouse for the 'No' button
   noBtn.addEventListener('touchstart', (e) => {
     e.preventDefault();
     moveNo();
   });
+  noBtn.addEventListener('mouseover', moveNo);
 
   yesBtn.onclick = () => {
-    questionBox.classList.add("hidden");
-    celebration.classList.remove("hidden");
-    hearts();
+    questionBox.style.opacity = "0";
+    setTimeout(() => {
+      questionBox.classList.add("hidden");
+      celebration.classList.remove("hidden");
+      createHearts();
+    }, 300);
   };
 
-  function hearts() {
-    for (let j = 0; j < 25; j++) {
+  function createHearts() {
+    const heartInterval = setInterval(() => {
       const h = document.createElement("div");
       h.className = "heart";
       h.textContent = "💖";
       h.style.left = Math.random() * 100 + "vw";
-      h.style.bottom = "-50px";
-      h.style.animationDelay = Math.random() * 2 + "s";
+      h.style.bottom = "-20px";
+      h.style.fontSize = (Math.random() * 20 + 15) + "px";
       document.body.appendChild(h);
+      
       setTimeout(() => h.remove(), 4000);
-    }
+    }, 150);
+
+    // Stop generating after 5 seconds to save battery
+    setTimeout(() => clearInterval(heartInterval), 5000);
   }
 </script>
 
