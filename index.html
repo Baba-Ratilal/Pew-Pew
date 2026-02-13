@@ -2,272 +2,305 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>A Special Question</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>A Message for You</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
 <style>
   :root {
-    --primary: #ff4d80;
-    --accent: #ff85a2;
-    --glass: rgba(255, 255, 255, 0.7);
-    --shadow: 0 8px 32px 0 rgba(255, 77, 128, 0.2);
+    --primary: #ff2d55;
+    --secondary: #5856d6;
+    --glass: rgba(255, 255, 255, 0.75);
+    --text: #1c1c1e;
   }
 
   * {
-    font-family: "Times New Roman", Times, serif !important;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Times New Roman", serif;
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
-    touch-action: none; /* Prevents all mobile scrolling/gestures */
+    touch-action: none;
   }
 
   body {
     margin: 0;
     height: 100dvh;
     width: 100vw;
-    background: radial-gradient(circle at top left, #ffd6e0, #c8f7ff);
+    background: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    position: fixed; /* Lock for iOS Safari */
+    position: fixed;
   }
 
-  /* Main Card */
-  .container {
+  /* Animated Background Bokeh */
+  .bg-blobs {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    filter: blur(80px);
+    z-index: -1;
+    background: #fff;
+  }
+
+  .blob {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: move 20s infinite alternate;
+  }
+
+  .blob-1 { background: #ffd6e0; top: -10%; left: -10%; }
+  .blob-2 { background: #c8f7ff; bottom: -10%; right: -10%; animation-delay: -5s; }
+  .blob-3 { background: #e0c3fc; top: 40%; left: 30%; animation-delay: -10s; }
+
+  @keyframes move {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(100px, 100px) scale(1.2); }
+  }
+
+  /* Designer Card */
+  .card {
     background: var(--glass);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 40px;
-    padding: 40px 20px;
-    width: 85%;
-    max-width: 360px;
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 38px;
+    padding: 40px 24px;
+    width: 88%;
+    max-width: 375px;
     text-align: center;
-    box-shadow: var(--shadow);
-    z-index: 100;
-    transition: transform 0.3s ease;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* GIF Display Area */
-  .media-screen {
+  .media-slot {
     width: 100%;
     height: 180px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.3);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.3);
     overflow: hidden;
+    position: relative;
   }
 
   .tenor-gif-embed {
-    transform: scale(1.2); /* Make GIFs pop */
+    width: 100% !important;
+    height: 100% !important;
+    transform: scale(1.1);
   }
 
   h1 {
-    font-size: 2rem;
-    color: var(--primary);
-    margin: 0 0 10px 0;
-    font-style: italic;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text);
+    margin: 0;
+    letter-spacing: -0.5px;
+    font-family: "SF Pro Display", "Times New Roman", serif !important;
   }
 
   p {
     font-size: 1.1rem;
-    color: #555;
-    margin-bottom: 30px;
+    color: #48484a;
+    line-height: 1.5;
+    margin: 12px 0 32px 0;
   }
 
-  /* Navigation Safe Zone */
-  .action-area {
+  /* Buttons */
+  .button-group {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    height: 80px;
-    width: 100%;
+    gap: 16px;
     position: relative;
   }
 
-  button {
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    z-index: 101;
-  }
-
-  #yes {
-    padding: 18px 45px;
+  .btn-primary {
     background: var(--primary);
     color: white;
-    font-size: 1.2rem;
-    box-shadow: 0 10px 20px rgba(255, 77, 128, 0.4);
-    /* Safe-anchored in middle */
+    padding: 20px 60px;
+    border-radius: 22px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    box-shadow: 0 10px 20px rgba(255, 45, 85, 0.3);
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
-  #no {
-    padding: 12px 28px;
-    background: #6e6e6e;
-    color: white;
-    font-size: 1rem;
+  .btn-primary:active { transform: scale(0.96); }
+
+  #no-btn {
+    background: rgba(0, 0, 0, 0.05);
+    color: #8e8e93;
+    padding: 12px 24px;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: none;
     position: fixed;
     z-index: 1000;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
-  /* Visual Vibration Effect */
-  @keyframes haptic {
-    0%, 100% { transform: translate(0, 0); }
-    25% { transform: translate(-4px, 4px); }
-    50% { transform: translate(4px, -4px); }
-    75% { transform: translate(-4px, -4px); }
-  }
-
-  .shake { animation: haptic 0.1s infinite; }
-
-  .hidden { display: none !important; }
-
-  /* Background Particles */
-  .heart {
+  /* Celebration State */
+  .hearts-container {
     position: absolute;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
-    animation: floatUp 4s linear forwards;
-    z-index: 1;
   }
 
-  @keyframes floatUp {
-    to { transform: translateY(-110dvh) rotate(360deg); opacity: 0; }
+  .hidden { display: none !important; opacity: 0; }
+
+  @keyframes haptic-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
   }
+
+  .vibrate { animation: haptic-shake 0.1s linear 2; }
 </style>
 </head>
 <body>
 
-  <div class="container" id="card-intro">
-    <div class="media-screen">
+  <div class="bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <div class="card" id="intro">
+    <div class="media-slot">
       <div class="tenor-gif-embed" data-postid="22532913" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"></div>
     </div>
-    <h1>Hey Sweetie… 🥺</h1>
-    <p>I have a very serious question to ask you.</p>
-    <button id="start-btn" style="padding: 18px 45px; background: var(--primary); color: white;">Open Message 💌</button>
-  </div>
-
-  <div class="container hidden" id="card-question">
-    <div class="media-screen">
-      <div id="gif-knife" class="tenor-gif-embed hidden" data-postid="6447555532574214775" data-share-method="host" data-aspect-ratio="1" data-width="100%"></div>
-      <div id="gif-shake" class="tenor-gif-embed hidden" data-postid="12413317499980731043" data-share-method="host" data-aspect-ratio="1.29016" data-width="100%"></div>
-      <div id="gif-break" class="tenor-gif-embed hidden" data-postid="12177904528014688220" data-share-method="host" data-aspect-ratio="1.04018" data-width="100%"></div>
-    </div>
-    
-    <h1 id="main-q">Do you love me? 💖</h1>
-    
-    <div class="action-area">
-      <button id="yes">Yes 💕</button>
-      <button id="no">No 🙄</button>
+    <h1>Hey… 🥺</h1>
+    <p>I have something I’ve been wanting to ask you for a while.</p>
+    <div class="button-group">
+      <button class="btn-primary" onclick="showQuestion()">Open Message 💌</button>
     </div>
   </div>
 
-  <div class="container hidden" id="card-celebration">
-    <div class="media-screen">
+  <div class="card hidden" id="question-card">
+    <div class="media-slot">
+      <div id="g1" class="tenor-gif-embed hidden" data-postid="6447555532574214775" data-share-method="host" data-aspect-ratio="1" data-width="100%"></div>
+      <div id="g2" class="tenor-gif-embed hidden" data-postid="12413317499980731043" data-share-method="host" data-aspect-ratio="1.29016" data-width="100%"></div>
+      <div id="g3" class="tenor-gif-embed hidden" data-postid="12177904528014688220" data-share-method="host" data-aspect-ratio="1.04018" data-width="100%"></div>
+    </div>
+    <h1 id="status-text">Do you love me? 💖</h1>
+    <p id="sub-text">Please think carefully...</p>
+    <div class="button-group" style="min-height: 80px;">
+      <button class="btn-primary" id="yes-btn" onclick="celebrate()">Yes 💕</button>
+      <button id="no-btn">No 🙄</button>
+    </div>
+  </div>
+
+  <div class="card hidden" id="celeb-card">
+    <div class="media-slot">
       <div class="tenor-gif-embed" data-postid="11975191960342404712" data-share-method="host" data-aspect-ratio="1.10667" data-width="100%"></div>
     </div>
-    <h1>I Knew It! 💖🎉</h1>
-    <p>I love you too! Now screenshot this and send it to me right now 😏📸</p>
+    <h1>I Knew It! 💖</h1>
+    <p>My heart is so full right now. Screenshot this and send it to me? 😏📸</p>
   </div>
 
   <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
 
   <script>
-    const startBtn = document.getElementById('start-btn');
-    const introCard = document.getElementById('card-intro');
-    const questionCard = document.getElementById('card-question');
-    const celebCard = document.getElementById('card-celebration');
-    const yesBtn = document.getElementById('yes');
-    const noBtn = document.getElementById('no');
-    const mainQ = document.getElementById('main-q');
-
-    const gKnife = document.getElementById('gif-knife');
-    const gShake = document.getElementById('gif-shake');
-    const gBreak = document.getElementById('gif-break');
-
     let count = 0;
-    const msgs = ["Sure? 😳", "Really? 🥺", "Last chance... 💔", "Stop it! 😭", "Error 404: No Button Disabled"];
+    const msgs = ["Are you sure? 😳", "Think again... 🥺", "Last chance... 💔", "Error: No is impossible ❌"];
 
-    // Mobile Haptic Simulation
     function triggerHaptic() {
-      document.body.classList.add('shake');
-      setTimeout(() => document.body.classList.remove('shake'), 100);
+      const activeCard = document.querySelector('.card:not(.hidden)');
+      activeCard.classList.add('vibrate');
+      setTimeout(() => activeCard.classList.remove('vibrate'), 200);
       if (navigator.vibrate) navigator.vibrate(50);
     }
 
-    startBtn.onclick = () => {
+    function showQuestion() {
       triggerHaptic();
-      introCard.classList.add('hidden');
-      questionCard.classList.remove('hidden');
+      document.getElementById('intro').classList.add('hidden');
+      const q = document.getElementById('question-card');
+      q.classList.remove('hidden');
       
-      // Position NO button initially near the Yes button
-      const yesRect = yesBtn.getBoundingClientRect();
-      noBtn.style.left = (yesRect.right + 20) + 'px';
-      noBtn.style.top = yesRect.top + 'px';
-    };
+      // Initialize No button position
+      const no = document.getElementById('no-btn');
+      const yes = document.getElementById('yes-btn').getBoundingClientRect();
+      no.style.left = (yes.left) + "px";
+      no.style.top = (yes.bottom + 20) + "px";
+    }
 
-    function escape() {
+    const moveNo = (e) => {
+      e.preventDefault();
       triggerHaptic();
-      mainQ.textContent = msgs[Math.min(count, msgs.length - 1)];
       
-      // Swapping your Tenor GIFs
-      if (count === 0) gKnife.classList.remove('hidden');
-      if (count === 1) { gKnife.classList.add('hidden'); gShake.classList.remove('hidden'); }
-      if (count === 3) { gShake.classList.add('hidden'); gBreak.classList.remove('hidden'); }
+      const no = document.getElementById('no-btn');
+      const yes = document.getElementById('yes-btn').getBoundingClientRect();
+      const status = document.getElementById('status-text');
+      const sub = document.getElementById('sub-text');
+
+      status.innerText = msgs[Math.min(count, msgs.length - 1)];
+      sub.innerText = "Don't click that! 😭";
+
+      // Swap GIFs
+      if (count === 0) document.getElementById('g1').classList.remove('hidden');
+      if (count === 1) { document.getElementById('g1').classList.add('hidden'); document.getElementById('g2').classList.remove('hidden'); }
+      if (count === 3) { document.getElementById('g2').classList.add('hidden'); document.getElementById('g3').classList.remove('hidden'); }
 
       count++;
 
-      // NO-OVERLAP ALGORITHM
-      const yesRect = yesBtn.getBoundingClientRect();
+      // Professional Avoidance Logic
       const padding = 40;
-      let newX, newY;
-
-      // Keep trying until we find a spot NOT overlapping the 'Yes' button card
+      let nx, ny;
       do {
-        newX = Math.random() * (window.innerWidth - 100) + 10;
-        newY = Math.random() * (window.innerHeight - 80) + 10;
+        nx = Math.random() * (window.innerWidth - no.offsetWidth - padding) + padding/2;
+        ny = Math.random() * (window.innerHeight - no.offsetHeight - padding) + padding/2;
       } while (
-        newX > yesRect.left - 100 && 
-        newX < yesRect.right + 100 && 
-        newY > yesRect.top - 100 && 
-        newY < yesRect.bottom + 100
+        nx > yes.left - 100 && nx < yes.right + 100 &&
+        ny > yes.top - 100 && ny < yes.bottom + 100
       );
 
-      noBtn.style.left = newX + 'px';
-      noBtn.style.top = newY + 'px';
-
-      // Grow the Yes Button
-      yesBtn.style.transform = `scale(${1 + (count * 0.25)})`;
+      no.style.left = nx + "px";
+      no.style.top = ny + "px";
       
-      if (count > 5) noBtn.style.display = 'none';
-    }
-
-    noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); escape(); });
-    noBtn.addEventListener('mouseover', escape);
-
-    yesBtn.onclick = () => {
-      triggerHaptic();
-      questionCard.classList.add('hidden');
-      celebCard.classList.remove('hidden');
-      rainHearts();
+      // Scale Yes button
+      document.getElementById('yes-btn').style.transform = `scale(${1 + (count * 0.2)})`;
+      
+      if (count > 5) no.style.display = 'none';
     };
 
-    function rainHearts() {
+    const no = document.getElementById('no-btn');
+    no.addEventListener('mouseover', moveNo);
+    no.addEventListener('touchstart', moveNo);
+
+    function celebrate() {
+      triggerHaptic();
+      document.getElementById('question-card').classList.add('hidden');
+      document.getElementById('celeb-card').classList.remove('hidden');
+      
       setInterval(() => {
         const heart = document.createElement('div');
-        heart.className = 'heart';
-        heart.innerHTML = ['💖','💗','💘','💝'][Math.floor(Math.random()*4)];
+        heart.innerText = '💖';
+        heart.style.position = 'fixed';
         heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.bottom = '-20px';
+        heart.style.bottom = '-50px';
         heart.style.fontSize = Math.random() * 20 + 20 + 'px';
+        heart.style.transition = 'all 4s linear';
+        heart.style.zIndex = '1';
         document.body.appendChild(heart);
+        
+        setTimeout(() => {
+          heart.style.transform = `translateY(-120dvh) rotate(${Math.random() * 360}deg)`;
+          heart.style.opacity = '0';
+        }, 50);
+        
         setTimeout(() => heart.remove(), 4000);
-      }, 150);
+      }, 100);
     }
   </script>
 </body>
