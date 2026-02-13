@@ -7,255 +7,268 @@
 
 <style>
   :root {
-    --primary: #ff3b6f;
-    --bg-grad: linear-gradient(135deg, #ffd6e0 0%, #c8f7ff 100%);
-    --glass: rgba(255, 255, 255, 0.4);
+    --primary: #ff4d80;
+    --accent: #ff85a2;
+    --glass: rgba(255, 255, 255, 0.7);
+    --shadow: 0 8px 32px 0 rgba(255, 77, 128, 0.2);
   }
 
   * {
     font-family: "Times New Roman", Times, serif !important;
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
+    touch-action: none; /* Prevents all mobile scrolling/gestures */
   }
 
   body {
     margin: 0;
     height: 100dvh;
     width: 100vw;
-    background: var(--bg-grad);
+    background: radial-gradient(circle at top left, #ffd6e0, #c8f7ff);
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    position: fixed;
+    position: fixed; /* Lock for iOS Safari */
   }
 
-  /* Main Container */
-  .box {
-    text-align: center;
-    padding: 30px 20px;
-    width: 85%;
-    max-width: 350px;
+  /* Main Card */
+  .container {
     background: var(--glass);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 30px;
-    border: 1px solid rgba(255,255,255,0.5);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    z-index: 10;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 40px;
+    padding: 40px 20px;
+    width: 85%;
+    max-width: 360px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    z-index: 100;
+    transition: transform 0.3s ease;
   }
 
-  /* Dedicated GIF Area to prevent overlapping */
-  .gif-stage {
+  /* GIF Display Area */
+  .media-screen {
     width: 100%;
-    min-height: 160px;
+    height: 180px;
+    margin-bottom: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 15px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.3);
+    overflow: hidden;
   }
 
   .tenor-gif-embed {
-    width: 150px !important;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: scale(1.2); /* Make GIFs pop */
   }
 
   h1 {
-    font-size: 1.8rem;
+    font-size: 2rem;
     color: var(--primary);
-    margin: 10px 0;
-    line-height: 1.2;
-    text-shadow: 1px 1px 0px white;
+    margin: 0 0 10px 0;
+    font-style: italic;
   }
 
   p {
     font-size: 1.1rem;
-    color: #666;
-    margin-bottom: 25px;
+    color: #555;
+    margin-bottom: 30px;
   }
 
-  /* Button Logic */
-  .btn-wrapper {
+  /* Navigation Safe Zone */
+  .action-area {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
-    margin-top: 20px;
+    height: 80px;
+    width: 100%;
     position: relative;
-    min-height: 60px;
   }
 
   button {
-    padding: 15px 30px;
-    font-size: 16px;
     border: none;
     border-radius: 50px;
     cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 101;
+  }
+
+  #yes {
+    padding: 18px 45px;
     background: var(--primary);
     color: white;
-    font-weight: bold;
-    box-shadow: 0 5px 15px rgba(255, 59, 111, 0.3);
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    z-index: 11;
+    font-size: 1.2rem;
+    box-shadow: 0 10px 20px rgba(255, 77, 128, 0.4);
+    /* Safe-anchored in middle */
   }
 
   #no {
-    background: #888;
-    position: fixed; /* Fixed to viewport to stay visible */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    z-index: 12;
+    padding: 12px 28px;
+    background: #6e6e6e;
+    color: white;
+    font-size: 1rem;
+    position: fixed;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   }
+
+  /* Visual Vibration Effect */
+  @keyframes haptic {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(-4px, 4px); }
+    50% { transform: translate(4px, -4px); }
+    75% { transform: translate(-4px, -4px); }
+  }
+
+  .shake { animation: haptic 0.1s infinite; }
 
   .hidden { display: none !important; }
 
-  /* Hearts Animation */
+  /* Background Particles */
   .heart {
     position: absolute;
     pointer-events: none;
-    z-index: 1;
     animation: floatUp 4s linear forwards;
+    z-index: 1;
   }
 
   @keyframes floatUp {
-    0% { transform: translateY(0) scale(1); opacity: 1; }
-    100% { transform: translateY(-110dvh) scale(1.5); opacity: 0; }
+    to { transform: translateY(-110dvh) rotate(360deg); opacity: 0; }
   }
 </style>
 </head>
 <body>
 
-  <div class="box" id="intro">
-    <div class="gif-stage">
+  <div class="container" id="card-intro">
+    <div class="media-screen">
       <div class="tenor-gif-embed" data-postid="22532913" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"></div>
     </div>
-    <h1>Hey… 🥺</h1>
-    <p>I need to ask you something very important 💗</p>
-    <button id="start">Okay 🫶</button>
+    <h1>Hey Sweetie… 🥺</h1>
+    <p>I have a very serious question to ask you.</p>
+    <button id="start-btn" style="padding: 18px 45px; background: var(--primary); color: white;">Open Message 💌</button>
   </div>
 
-  <div class="box hidden" id="questionBox">
-    <div class="gif-stage">
-      <div id="g-knife" class="tenor-gif-embed hidden" data-postid="6447555532574214775" data-share-method="host" data-aspect-ratio="1" data-width="100%"></div>
-      <div id="g-shake" class="tenor-gif-embed hidden" data-postid="12413317499980731043" data-share-method="host" data-aspect-ratio="1.29016" data-width="100%"></div>
-      <div id="g-break" class="tenor-gif-embed hidden" data-postid="12177904528014688220" data-share-method="host" data-aspect-ratio="1.04018" data-width="100%"></div>
+  <div class="container hidden" id="card-question">
+    <div class="media-screen">
+      <div id="gif-knife" class="tenor-gif-embed hidden" data-postid="6447555532574214775" data-share-method="host" data-aspect-ratio="1" data-width="100%"></div>
+      <div id="gif-shake" class="tenor-gif-embed hidden" data-postid="12413317499980731043" data-share-method="host" data-aspect-ratio="1.29016" data-width="100%"></div>
+      <div id="gif-break" class="tenor-gif-embed hidden" data-postid="12177904528014688220" data-share-method="host" data-aspect-ratio="1.04018" data-width="100%"></div>
     </div>
     
-    <h1 id="question">Do you love me? 💖</h1>
+    <h1 id="main-q">Do you love me? 💖</h1>
     
-    <div class="btn-wrapper">
+    <div class="action-area">
       <button id="yes">Yes 💕</button>
       <button id="no">No 🙄</button>
     </div>
   </div>
 
-  <div class="box hidden" id="celebration">
-    <div class="gif-stage">
+  <div class="container hidden" id="card-celebration">
+    <div class="media-screen">
       <div class="tenor-gif-embed" data-postid="11975191960342404712" data-share-method="host" data-aspect-ratio="1.10667" data-width="100%"></div>
     </div>
-    <h1>YAYYYY 💖🎉</h1>
-    <p>I knew it 😌</p>
-    <p>Screenshot this & send it to me 😏📸</p>
+    <h1>I Knew It! 💖🎉</h1>
+    <p>I love you too! Now screenshot this and send it to me right now 😏📸</p>
   </div>
 
   <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
 
   <script>
-    const startBtn = document.getElementById("start");
-    const intro = document.getElementById("intro");
-    const questionBox = document.getElementById("questionBox");
-    const celebration = document.getElementById("celebration");
-    const noBtn = document.getElementById("no");
-    const yesBtn = document.getElementById("yes");
-    const questionText = document.getElementById("question");
+    const startBtn = document.getElementById('start-btn');
+    const introCard = document.getElementById('card-intro');
+    const questionCard = document.getElementById('card-question');
+    const celebCard = document.getElementById('card-celebration');
+    const yesBtn = document.getElementById('yes');
+    const noBtn = document.getElementById('no');
+    const mainQ = document.getElementById('main-q');
 
-    const gKnife = document.getElementById("g-knife");
-    const gShake = document.getElementById("g-shake");
-    const gBreak = document.getElementById("g-break");
+    const gKnife = document.getElementById('gif-knife');
+    const gShake = document.getElementById('gif-shake');
+    const gBreak = document.getElementById('gif-break');
 
-    const msgs = ["Are you sure? 😳", "Think carefully… 🥺", "My heart is watching 💔", "Stop joking now 😭", "No is unavailable ❌"];
     let count = 0;
+    const msgs = ["Sure? 😳", "Really? 🥺", "Last chance... 💔", "Stop it! 😭", "Error 404: No Button Disabled"];
 
-    // Trigger vibration helper
-    function shakePhone() {
-      if (navigator.vibrate) {
-        navigator.vibrate([50, 30, 50]);
-      }
+    // Mobile Haptic Simulation
+    function triggerHaptic() {
+      document.body.classList.add('shake');
+      setTimeout(() => document.body.classList.remove('shake'), 100);
+      if (navigator.vibrate) navigator.vibrate(50);
     }
 
     startBtn.onclick = () => {
-      shakePhone();
-      intro.classList.add("hidden");
-      questionBox.classList.remove("hidden");
-      // Pre-position No button
-      const rect = noBtn.getBoundingClientRect();
-      noBtn.style.top = rect.top + "px";
-      noBtn.style.left = rect.left + "px";
+      triggerHaptic();
+      introCard.classList.add('hidden');
+      questionCard.classList.remove('hidden');
+      
+      // Position NO button initially near the Yes button
+      const yesRect = yesBtn.getBoundingClientRect();
+      noBtn.style.left = (yesRect.right + 20) + 'px';
+      noBtn.style.top = yesRect.top + 'px';
     };
 
-    function moveNo() {
-      shakePhone();
-      questionText.textContent = msgs[Math.min(count, msgs.length - 1)];
+    function escape() {
+      triggerHaptic();
+      mainQ.textContent = msgs[Math.min(count, msgs.length - 1)];
       
-      // GIF Logic
-      if (count === 0) { gKnife.classList.remove("hidden"); }
-      if (count === 1) { gKnife.classList.add("hidden"); gShake.classList.remove("hidden"); }
-      if (count === 3) { gShake.classList.add("hidden"); gBreak.classList.remove("hidden"); }
+      // Swapping your Tenor GIFs
+      if (count === 0) gKnife.classList.remove('hidden');
+      if (count === 1) { gKnife.classList.add('hidden'); gShake.classList.remove('hidden'); }
+      if (count === 3) { gShake.classList.add('hidden'); gBreak.classList.remove('hidden'); }
 
       count++;
 
-      // iOS Safe Movement Logic
-      const padding = 50;
-      const safeZone = yesBtn.getBoundingClientRect();
-      
+      // NO-OVERLAP ALGORITHM
+      const yesRect = yesBtn.getBoundingClientRect();
+      const padding = 40;
       let newX, newY;
-      
-      // Avoid spawning No button on top of Yes button
+
+      // Keep trying until we find a spot NOT overlapping the 'Yes' button card
       do {
-        newX = Math.random() * (window.innerWidth - padding * 2) + padding;
-        newY = Math.random() * (window.innerHeight - padding * 2) + padding;
+        newX = Math.random() * (window.innerWidth - 100) + 10;
+        newY = Math.random() * (window.innerHeight - 80) + 10;
       } while (
-        newX > safeZone.left - 50 && 
-        newX < safeZone.right + 50 && 
-        newY > safeZone.top - 50 && 
-        newY < safeZone.bottom + 50
+        newX > yesRect.left - 100 && 
+        newX < yesRect.right + 100 && 
+        newY > yesRect.top - 100 && 
+        newY < yesRect.bottom + 100
       );
 
-      noBtn.style.left = newX + "px";
-      noBtn.style.top = newY + "px";
+      noBtn.style.left = newX + 'px';
+      noBtn.style.top = newY + 'px';
 
-      // Scale Yes button
-      const scale = Math.min(1 + count * 0.2, 2.0);
-      yesBtn.style.transform = `scale(${scale})`;
-
-      if (count > 6) noBtn.style.display = "none";
+      // Grow the Yes Button
+      yesBtn.style.transform = `scale(${1 + (count * 0.25)})`;
+      
+      if (count > 5) noBtn.style.display = 'none';
     }
 
-    noBtn.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      moveNo();
-    });
-    noBtn.onmouseover = moveNo;
+    noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); escape(); });
+    noBtn.addEventListener('mouseover', escape);
 
     yesBtn.onclick = () => {
-      shakePhone();
-      questionBox.classList.add("hidden");
-      celebration.classList.remove("hidden");
-      
-      // Heart rain
-      setInterval(() => {
-        const h = document.createElement("div");
-        h.className = "heart";
-        h.innerHTML = "💖";
-        h.style.left = Math.random() * 100 + "vw";
-        h.style.bottom = "-20px";
-        h.style.fontSize = Math.random() * 20 + 20 + "px";
-        document.body.appendChild(h);
-        setTimeout(() => h.remove(), 4000);
-      }, 200);
+      triggerHaptic();
+      questionCard.classList.add('hidden');
+      celebCard.classList.remove('hidden');
+      rainHearts();
     };
+
+    function rainHearts() {
+      setInterval(() => {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerHTML = ['💖','💗','💘','💝'][Math.floor(Math.random()*4)];
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.bottom = '-20px';
+        heart.style.fontSize = Math.random() * 20 + 20 + 'px';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 4000);
+      }, 150);
+    }
   </script>
 </body>
 </html>
