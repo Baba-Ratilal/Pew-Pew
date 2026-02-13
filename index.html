@@ -9,7 +9,7 @@
   * {
     font-family: "Times New Roman", Times, serif !important;
     box-sizing: border-box;
-    touch-action: manipulation; /* Prevents accidental zooming */
+    touch-action: manipulation;
   }
 
   body {
@@ -20,7 +20,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* Prevents scrolling on move */
+    overflow: hidden;
     position: relative;
   }
 
@@ -32,10 +32,8 @@
     z-index: 5;
   }
 
-  /* GIF Containers */
-  .mood-gif, .tenor-gif-embed {
-    width: 140px !important;
-    height: 140px !important;
+  .tenor-gif-embed {
+    max-width: 180px !important;
     margin: 0 auto 15px auto !important;
     border-radius: 15px;
     overflow: hidden;
@@ -58,7 +56,7 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
-    min-height: 100px; /* Space for growing Yes button */
+    min-height: 100px;
   }
 
   button {
@@ -70,12 +68,11 @@
     background: #ff3b6f;
     color: white;
     transition: transform 0.2s ease;
-    white-space: nowrap;
   }
 
   #no {
     background: #666;
-    position: absolute; /* Needed for random movement */
+    position: absolute;
     transition: all 0.15s ease-out;
   }
 
@@ -98,25 +95,32 @@
 <body>
 
 <div class="box" id="intro">
-  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3eHpkZzR2eHpxbm94eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnB0PWEmZW1mPTAmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PXM/m8f9sh8I7F5tO6Jm6t/giphy.gif" class="mood-gif">
+  <div class="tenor-gif-embed" data-postid="22532913" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%">
+    <a href="https://tenor.com/view/beluga-the-cat-hakosh1307-hakosh-beluga-cat-hug-gif-22532913">Beluga Cat Hug</a>
+  </div>
   <h1>Hey… 🥺</h1>
   <p>I need to ask you something very important 💗</p>
   <button id="start">Okay 🫶</button>
 </div>
 
 <div class="box hidden" id="questionBox">
-  <div id="gif-normal"><img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3eHpkZzR2eHpxbm94eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnB0PWEmZW1mPTAmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PXM/m8f9sh8I7F5tO6Jm6t/giphy.gif" class="mood-gif"></div>
   
   <div id="gif-knife" class="hidden">
-    <div class="tenor-gif-embed" data-postid="6447555532574214775" data-share-method="host" data-aspect-ratio="1" data-width="100%"><a href="https://tenor.com/view/peach-and-goma-mitao-cat-angry-knife-cat-gif-6447555532574214775">Knife Cat</a></div>
+    <div class="tenor-gif-embed" data-postid="6447555532574214775" data-share-method="host" data-aspect-ratio="1" data-width="100%">
+      <a href="https://tenor.com/view/peach-and-goma-mitao-cat-angry-knife-cat-gif-6447555532574214775">Knife Cat</a>
+    </div>
   </div>
 
   <div id="gif-shake" class="hidden">
-    <div class="tenor-gif-embed" data-postid="12413317499980731043" data-share-method="host" data-aspect-ratio="1.29016" data-width="100%"><a href="https://tenor.com/view/peach-peach-goma-shake-shaking-gif-12413317499980731043">Shaking Cat</a></div>
+    <div class="tenor-gif-embed" data-postid="12413317499980731043" data-share-method="host" data-aspect-ratio="1.29016" data-width="100%">
+      <a href="https://tenor.com/view/peach-peach-goma-shake-shaking-gif-12413317499980731043">Shaking Cat</a>
+    </div>
   </div>
 
   <div id="gif-breakdown" class="hidden">
-    <div class="tenor-gif-embed" data-postid="12177904528014688220" data-share-method="host" data-aspect-ratio="1.04018" data-width="100%"><a href="https://tenor.com/view/peach-goma-sticker-gif-12177904528014688220">Crying Cat</a></div>
+    <div class="tenor-gif-embed" data-postid="12177904528014688220" data-share-method="host" data-aspect-ratio="1.04018" data-width="100%">
+      <a href="https://tenor.com/view/peach-goma-sticker-gif-12177904528014688220">Crying Cat</a>
+    </div>
   </div>
 
   <h1 id="question">Do you love me? 💖</h1>
@@ -128,7 +132,9 @@
 </div>
 
 <div class="box hidden" id="celebration">
-  <div class="tenor-gif-embed" data-postid="11975191960342404712" data-share-method="host" data-aspect-ratio="1.10667" data-width="100%"><a href="https://tenor.com/view/peach-goma-sparkle-gif-11975191960342404712">Happy Cat</a></div>
+  <div class="tenor-gif-embed" data-postid="11975191960342404712" data-share-method="host" data-aspect-ratio="1.10667" data-width="100%">
+    <a href="https://tenor.com/view/peach-goma-sparkle-gif-11975191960342404712">Sparkle Cat</a>
+  </div>
   <h1>YAYYYY 💖🎉</h1>
   <p>I knew it 😌</p>
   <p>Screenshot this & send it to me 😏📸</p>
@@ -141,10 +147,11 @@
   const startBtn = document.getElementById("start");
   const questionBox = document.getElementById("questionBox");
   const question = document.getElementById("question");
-  const gNormal = document.getElementById("gif-normal");
+  
   const gKnife = document.getElementById("gif-knife");
   const gShake = document.getElementById("gif-shake");
   const gBreak = document.getElementById("gif-breakdown");
+
   const yesBtn = document.getElementById("yes");
   const noBtn = document.getElementById("no");
   const celebration = document.getElementById("celebration");
@@ -155,21 +162,25 @@
   startBtn.onclick = () => {
     intro.classList.add("hidden");
     questionBox.classList.remove("hidden");
-    // Initial position for NO button so it doesn't jump weirdly the first time
     noBtn.style.position = "absolute";
   };
 
   function moveNo() {
     question.textContent = msgs[Math.min(i, msgs.length - 1)];
     
-    if (i === 0) { gNormal.classList.add("hidden"); gKnife.classList.remove("hidden"); }
-    else if (i === 1) { gKnife.classList.add("hidden"); gShake.classList.remove("hidden"); }
-    else if (i === 2) { gShake.classList.add("hidden"); gBreak.classList.remove("hidden"); }
+    if (i === 0) {
+      gKnife.classList.remove("hidden");
+    } else if (i === 1) {
+      gKnife.classList.add("hidden");
+      gShake.classList.remove("hidden");
+    } else if (i === 4) {
+      gShake.classList.add("hidden");
+      gBreak.classList.remove("hidden");
+    }
 
     i++;
     navigator.vibrate?.([50, 50]);
 
-    // PADDING ensures the button doesn't go off the screen edges
     const padding = 20;
     const maxX = window.innerWidth - noBtn.offsetWidth - padding;
     const maxY = window.innerHeight - noBtn.offsetHeight - padding;
@@ -180,17 +191,14 @@
     noBtn.style.left = randomX + "px";
     noBtn.style.top = randomY + "px";
 
-    // Yes button growth (Limited so it doesn't break the layout)
-    const scale = Math.min(1 + i * 0.2, 2.5);
-    yesBtn.style.transform = `scale(${scale})`;
+    yesBtn.style.transform = `scale(${Math.min(1 + i * 0.2, 2.5)})`;
 
     if (i > 6) noBtn.style.display = "none";
   }
 
-  // Mobile & Desktop support
   noBtn.addEventListener('mouseover', moveNo);
   noBtn.addEventListener('touchstart', (e) => {
-    e.preventDefault(); // Prevents clicking the button on mobile
+    e.preventDefault();
     moveNo();
   });
 
