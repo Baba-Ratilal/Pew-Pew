@@ -2,19 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>A Message for You</title>
+<title>A Special Message</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
 <style>
   :root {
     --primary: #ff2d55;
-    --secondary: #5856d6;
-    --glass: rgba(255, 255, 255, 0.75);
+    --glass: rgba(255, 255, 255, 0.7);
     --text: #1c1c1e;
   }
 
   * {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Times New Roman", serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
     touch-action: none;
@@ -32,159 +31,143 @@
     position: fixed;
   }
 
-  /* Animated Background Bokeh */
-  .bg-blobs {
+  /* --- PROFESSIONAL DYNAMIC GRADIENT BACKGROUND --- */
+  .canvas-bg {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    filter: blur(80px);
+    top: 0; left: 0; width: 100%; height: 100%;
     z-index: -1;
-    background: #fff;
+    background-color: #ffffff;
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(340,100%,80%,1) 0, transparent 50%), 
+      radial-gradient(at 50% 0%, hsla(225,100%,85%,1) 0, transparent 50%), 
+      radial-gradient(at 100% 0%, hsla(338,100%,82%,1) 0, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(180,100%,90%,1) 0, transparent 50%),
+      radial-gradient(at 100% 100%, hsla(280,100%,88%,1) 0, transparent 50%);
+    background-size: 200% 200%;
+    animation: gradientMove 12s ease infinite alternate;
   }
 
-  .blob {
-    position: absolute;
-    width: 400px;
-    height: 400px;
-    border-radius: 50%;
-    opacity: 0.6;
-    animation: move 20s infinite alternate;
+  @keyframes gradientMove {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
   }
 
-  .blob-1 { background: #ffd6e0; top: -10%; left: -10%; }
-  .blob-2 { background: #c8f7ff; bottom: -10%; right: -10%; animation-delay: -5s; }
-  .blob-3 { background: #e0c3fc; top: 40%; left: 30%; animation-delay: -10s; }
-
-  @keyframes move {
-    from { transform: translate(0, 0) scale(1); }
-    to { transform: translate(100px, 100px) scale(1.2); }
-  }
-
-  /* Designer Card */
+  /* --- GLASS CARD --- */
   .card {
     background: var(--glass);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 38px;
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
+    border-radius: 40px;
     padding: 40px 24px;
-    width: 88%;
-    max-width: 375px;
+    width: 90%;
+    max-width: 370px;
     text-align: center;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
     z-index: 10;
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    /* Subtle inner glow */
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5), 0 20px 40px rgba(0, 0, 0, 0.1);
   }
 
   .media-slot {
     width: 100%;
     height: 180px;
-    margin-bottom: 24px;
+    margin-bottom: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 24px;
-    background: rgba(255, 255, 255, 0.3);
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.4);
     overflow: hidden;
-    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
   }
 
-  .tenor-gif-embed {
-    width: 100% !important;
-    height: 100% !important;
-    transform: scale(1.1);
+  h1 { 
+    font-size: 2.2rem; 
+    font-weight: 800; 
+    color: var(--text); 
+    margin: 0; 
+    letter-spacing: -0.8px;
+    line-height: 1.1;
   }
 
-  h1 {
-    font-size: 2.2rem;
-    font-weight: 800;
-    color: var(--text);
-    margin: 0;
-    letter-spacing: -0.5px;
-    font-family: "SF Pro Display", "Times New Roman", serif !important;
-  }
+  p { font-size: 1.1rem; color: #444; margin: 12px 0 28px 0; line-height: 1.4; font-weight: 500; }
 
-  p {
-    font-size: 1.1rem;
-    color: #48484a;
-    line-height: 1.5;
-    margin: 12px 0 32px 0;
-  }
-
-  /* Buttons */
-  .button-group {
+  /* --- BUTTON UI --- */
+  .button-row {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    gap: 16px;
+    gap: 15px;
+    width: 100%;
     position: relative;
+    min-height: 70px;
   }
 
-  .btn-primary {
+  .btn-main {
     background: var(--primary);
     color: white;
-    padding: 20px 60px;
-    border-radius: 22px;
+    padding: 18px 38px;
+    border-radius: 24px;
     font-size: 1.1rem;
     font-weight: 700;
     border: none;
     cursor: pointer;
-    width: 100%;
-    box-shadow: 0 10px 20px rgba(255, 45, 85, 0.3);
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: 0 10px 25px rgba(255, 45, 85, 0.3);
+    transition: all 0.2s cubic-bezier(0.33, 1, 0.68, 1);
+    z-index: 20;
   }
 
-  .btn-primary:active { transform: scale(0.96); }
+  .btn-main:active { transform: scale(0.94); }
 
   #no-btn {
-    background: rgba(0, 0, 0, 0.05);
-    color: #8e8e93;
-    padding: 12px 24px;
-    border-radius: 16px;
-    font-size: 0.9rem;
-    font-weight: 600;
+    background: rgba(0, 0, 0, 0.08);
+    color: #2c2c2e;
+    padding: 18px 38px;
+    border-radius: 24px;
+    font-size: 1.1rem;
+    font-weight: 700;
     border: none;
-    position: fixed;
-    z-index: 1000;
+    cursor: pointer;
     transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 15;
   }
 
-  /* Celebration State */
-  .hearts-container {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-  }
-
-  .hidden { display: none !important; opacity: 0; }
-
+  /* --- SYSTEM FEEDBACK --- */
   @keyframes haptic-shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(0.98) rotate(-1deg); }
+    75% { transform: scale(1.02) rotate(1deg); }
   }
+  .haptic { animation: haptic-shake 0.15s ease-in-out; }
 
-  .vibrate { animation: haptic-shake 0.1s linear 2; }
+  .hidden { display: none !important; }
+  
+  .heart {
+    position: absolute;
+    pointer-events: none;
+    z-index: 100;
+    animation: floatUp 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(0); opacity: 0; }
+    20% { opacity: 1; transform: translateY(-20px) scale(1.2); }
+    100% { transform: translateY(-110dvh) rotate(45deg); opacity: 0; }
+  }
 </style>
 </head>
 <body>
 
-  <div class="bg-blobs">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-  </div>
+  <div class="canvas-bg"></div>
 
   <div class="card" id="intro">
     <div class="media-slot">
       <div class="tenor-gif-embed" data-postid="22532913" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"></div>
     </div>
     <h1>Hey… 🥺</h1>
-    <p>I have something I’ve been wanting to ask you for a while.</p>
-    <div class="button-group">
-      <button class="btn-primary" onclick="showQuestion()">Open Message 💌</button>
-    </div>
+    <p>I’ve been waiting for the right moment to ask you this...</p>
+    <button class="btn-main" onclick="showQuestion()" style="width: 100%;">View Private Message 🔒</button>
   </div>
 
   <div class="card hidden" id="question-card">
@@ -194,9 +177,9 @@
       <div id="g3" class="tenor-gif-embed hidden" data-postid="12177904528014688220" data-share-method="host" data-aspect-ratio="1.04018" data-width="100%"></div>
     </div>
     <h1 id="status-text">Do you love me? 💖</h1>
-    <p id="sub-text">Please think carefully...</p>
-    <div class="button-group" style="min-height: 80px;">
-      <button class="btn-primary" id="yes-btn" onclick="celebrate()">Yes 💕</button>
+    <p id="sub-text">Please be honest with me...</p>
+    <div class="button-row" id="btn-row">
+      <button class="btn-main" id="yes-btn" onclick="celebrate()">Yes 💕</button>
       <button id="no-btn">No 🙄</button>
     </div>
   </div>
@@ -205,102 +188,95 @@
     <div class="media-slot">
       <div class="tenor-gif-embed" data-postid="11975191960342404712" data-share-method="host" data-aspect-ratio="1.10667" data-width="100%"></div>
     </div>
-    <h1>I Knew It! 💖</h1>
-    <p>My heart is so full right now. Screenshot this and send it to me? 😏📸</p>
+    <h1>I Knew It! 💖🎉</h1>
+    <p>You just made my day. Screenshot this and send it over? 😏📸</p>
   </div>
 
   <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
 
   <script>
     let count = 0;
-    const msgs = ["Are you sure? 😳", "Think again... 🥺", "Last chance... 💔", "Error: No is impossible ❌"];
+    const msgs = ["Are you sure? 😳", "Please reconsider... 🥺", "You're breaking my heart 💔", "Error: Button Malfunction ❌"];
 
     function triggerHaptic() {
-      const activeCard = document.querySelector('.card:not(.hidden)');
-      activeCard.classList.add('vibrate');
-      setTimeout(() => activeCard.classList.remove('vibrate'), 200);
-      if (navigator.vibrate) navigator.vibrate(50);
+      const card = document.querySelector('.card:not(.hidden)');
+      card.classList.remove('haptic');
+      void card.offsetWidth; 
+      card.classList.add('haptic');
+      if (navigator.vibrate) navigator.vibrate(60);
     }
 
     function showQuestion() {
       triggerHaptic();
       document.getElementById('intro').classList.add('hidden');
-      const q = document.getElementById('question-card');
-      q.classList.remove('hidden');
-      
-      // Initialize No button position
-      const no = document.getElementById('no-btn');
-      const yes = document.getElementById('yes-btn').getBoundingClientRect();
-      no.style.left = (yes.left) + "px";
-      no.style.top = (yes.bottom + 20) + "px";
+      document.getElementById('question-card').classList.remove('hidden');
     }
 
-    const moveNo = (e) => {
-      e.preventDefault();
+    function moveNo(e) {
+      if(e.type === 'touchstart') e.preventDefault();
       triggerHaptic();
       
       const no = document.getElementById('no-btn');
-      const yes = document.getElementById('yes-btn').getBoundingClientRect();
+      const yes = document.getElementById('yes-btn');
       const status = document.getElementById('status-text');
       const sub = document.getElementById('sub-text');
-
+      
       status.innerText = msgs[Math.min(count, msgs.length - 1)];
-      sub.innerText = "Don't click that! 😭";
+      sub.innerText = "Wait, that's the wrong button! 😭";
 
-      // Swap GIFs
-      if (count === 0) document.getElementById('g1').classList.remove('hidden');
+      if (count === 0) { 
+        document.getElementById('g1').classList.remove('hidden');
+        no.style.position = 'fixed'; 
+      }
       if (count === 1) { document.getElementById('g1').classList.add('hidden'); document.getElementById('g2').classList.remove('hidden'); }
       if (count === 3) { document.getElementById('g2').classList.add('hidden'); document.getElementById('g3').classList.remove('hidden'); }
 
       count++;
 
-      // Professional Avoidance Logic
-      const padding = 40;
+      // Intelligent Avoidance (Stays within safe bounds of phone)
+      const p = 60;
+      const yesRect = yes.getBoundingClientRect();
       let nx, ny;
+
       do {
-        nx = Math.random() * (window.innerWidth - no.offsetWidth - padding) + padding/2;
-        ny = Math.random() * (window.innerHeight - no.offsetHeight - padding) + padding/2;
+        nx = Math.random() * (window.innerWidth - no.offsetWidth - p) + p/2;
+        ny = Math.random() * (window.innerHeight - no.offsetHeight - p) + p/2;
       } while (
-        nx > yes.left - 100 && nx < yes.right + 100 &&
-        ny > yes.top - 100 && ny < yes.bottom + 100
+        nx > yesRect.left - 100 && nx < yesRect.right + 100 &&
+        ny > yesRect.top - 100 && ny < yesRect.bottom + 100
       );
 
       no.style.left = nx + "px";
       no.style.top = ny + "px";
       
-      // Scale Yes button
-      document.getElementById('yes-btn').style.transform = `scale(${1 + (count * 0.2)})`;
+      // Dramatic Yes growth
+      const scaleValue = Math.min(1 + (count * 0.25), 2.5);
+      yes.style.transform = `scale(${scaleValue})`;
       
-      if (count > 5) no.style.display = 'none';
-    };
+      if (count > 6) no.style.display = 'none';
+    }
 
-    const no = document.getElementById('no-btn');
-    no.addEventListener('mouseover', moveNo);
-    no.addEventListener('touchstart', moveNo);
+    const noBtn = document.getElementById('no-btn');
+    noBtn.addEventListener('touchstart', moveNo);
+    noBtn.addEventListener('mouseover', moveNo);
 
     function celebrate() {
       triggerHaptic();
       document.getElementById('question-card').classList.add('hidden');
       document.getElementById('celeb-card').classList.remove('hidden');
       
+      const colors = ['#ff2d55', '#ff85a2', '#ffb3c6', '#ff0054'];
       setInterval(() => {
         const heart = document.createElement('div');
+        heart.className = 'heart';
         heart.innerText = '💖';
-        heart.style.position = 'fixed';
         heart.style.left = Math.random() * 100 + 'vw';
         heart.style.bottom = '-50px';
-        heart.style.fontSize = Math.random() * 20 + 20 + 'px';
-        heart.style.transition = 'all 4s linear';
-        heart.style.zIndex = '1';
+        heart.style.fontSize = Math.random() * 25 + 15 + 'px';
+        heart.style.color = colors[Math.floor(Math.random() * colors.length)];
         document.body.appendChild(heart);
-        
-        setTimeout(() => {
-          heart.style.transform = `translateY(-120dvh) rotate(${Math.random() * 360}deg)`;
-          heart.style.opacity = '0';
-        }, 50);
-        
         setTimeout(() => heart.remove(), 4000);
-      }, 100);
+      }, 120);
     }
   </script>
 </body>
