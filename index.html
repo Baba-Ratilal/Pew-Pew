@@ -3,87 +3,94 @@
 <head>
 <meta charset="UTF-8">
 <title>Important Question</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <style>
-  /* FORCE TIMES NEW ROMAN EVERYWHERE */
   * {
     font-family: "Times New Roman", Times, serif !important;
     box-sizing: border-box;
+    touch-action: manipulation; /* Prevents accidental zooming */
   }
 
   body {
     margin: 0;
     height: 100vh;
+    width: 100vw;
     background: linear-gradient(135deg, #ffd6e0, #c8f7ff);
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow: hidden; /* Prevents scrolling on move */
+    position: relative;
   }
 
   .box {
     text-align: center;
-    padding: 30px;
-    width: 100%;
-    max-width: 420px;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    z-index: 5;
   }
 
-  /* GIF Styling */
-  .mood-gif {
-    width: 160px;
-    height: 160px;
-    object-fit: contain;
-    border-radius: 20px;
-    margin-bottom: 15px;
-    /* Optional: subtle shadow for depth */
-    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
+  /* GIF Containers */
+  .mood-gif, .tenor-gif-embed {
+    width: 140px !important;
+    height: 140px !important;
+    margin: 0 auto 15px auto !important;
+    border-radius: 15px;
+    overflow: hidden;
   }
 
   h1 {
-    font-size: clamp(2.2rem, 7vw, 3rem);
+    font-size: clamp(1.8rem, 8vw, 2.5rem);
     color: #ff3b6f;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   p {
-    font-size: clamp(1.1rem, 4vw, 1.25rem);
+    font-size: 1.1rem;
     color: #555;
     margin-bottom: 20px;
   }
 
+  .btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    min-height: 100px; /* Space for growing Yes button */
+  }
+
   button {
-    padding: 16px 38px;
-    font-size: 1.2rem;
+    padding: 14px 30px;
+    font-size: 1.1rem;
     border: none;
     border-radius: 30px;
-    margin: 10px;
     cursor: pointer;
     background: #ff3b6f;
     color: white;
     transition: transform 0.2s ease;
+    white-space: nowrap;
   }
 
   #no {
     background: #666;
-    position: absolute;
-    z-index: 10;
+    position: absolute; /* Needed for random movement */
+    transition: all 0.15s ease-out;
   }
 
-  .hidden {
-    display: none !important;
-  }
+  .hidden { display: none !important; }
 
   .heart {
     position: absolute;
-    font-size: 2rem;
-    z-index: -1;
+    font-size: 1.5rem;
+    z-index: 1;
     animation: float 4s linear infinite;
   }
 
   @keyframes float {
     from { transform: translateY(0); opacity: 1; }
-    to { transform: translateY(-100vh); opacity: 0; }
+    to { transform: translateY(-110vh); opacity: 0; }
   }
 </style>
 </head>
@@ -91,101 +98,115 @@
 <body>
 
 <div class="box" id="intro">
-  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3eHpkZzR2eHpxbm94eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnB0PWEmZW1mPTAmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PXM/m8f9sh8I7F5tO6Jm6t/giphy.gif" class="mood-gif" alt="Cute wave">
+  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3eHpkZzR2eHpxbm94eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnB0PWEmZW1mPTAmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PXM/m8f9sh8I7F5tO6Jm6t/giphy.gif" class="mood-gif">
   <h1>Hey… 🥺</h1>
   <p>I need to ask you something very important 💗</p>
   <button id="start">Okay 🫶</button>
 </div>
 
 <div class="box hidden" id="questionBox">
-  <img id="moodGif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3eHpkZzR2eHpxbm94eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnB0PWEmZW1mPTAmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PXM/m8f9sh8I7F5tO6Jm6t/giphy.gif" class="mood-gif" alt="Thinking">
+  <div id="gif-normal"><img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3eHpkZzR2eHpxbm94eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnB0PWEmZW1mPTAmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PXM/m8f9sh8I7F5tO6Jm6t/giphy.gif" class="mood-gif"></div>
+  
+  <div id="gif-knife" class="hidden">
+    <div class="tenor-gif-embed" data-postid="6447555532574214775" data-share-method="host" data-aspect-ratio="1" data-width="100%"><a href="https://tenor.com/view/peach-and-goma-mitao-cat-angry-knife-cat-gif-6447555532574214775">Knife Cat</a></div>
+  </div>
+
+  <div id="gif-shake" class="hidden">
+    <div class="tenor-gif-embed" data-postid="12413317499980731043" data-share-method="host" data-aspect-ratio="1.29016" data-width="100%"><a href="https://tenor.com/view/peach-peach-goma-shake-shaking-gif-12413317499980731043">Shaking Cat</a></div>
+  </div>
+
+  <div id="gif-breakdown" class="hidden">
+    <div class="tenor-gif-embed" data-postid="12177904528014688220" data-share-method="host" data-aspect-ratio="1.04018" data-width="100%"><a href="https://tenor.com/view/peach-goma-sticker-gif-12177904528014688220">Crying Cat</a></div>
+  </div>
+
   <h1 id="question">Do you love me? 💖</h1>
-  <button id="yes">Yes 💕</button>
-  <button id="no">No 🙄</button>
+  
+  <div class="btn-container">
+    <button id="yes">Yes 💕</button>
+    <button id="no">No 🙄</button>
+  </div>
 </div>
 
 <div class="box hidden" id="celebration">
-  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnZic2Z3eHpkZzR2eHpxbm94eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnB0PWEmZW1mPTAmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PXM/c77vV9vVvVvVvVvVvV/giphy.gif" class="mood-gif" alt="Happy">
+  <div class="tenor-gif-embed" data-postid="11975191960342404712" data-share-method="host" data-aspect-ratio="1.10667" data-width="100%"><a href="https://tenor.com/view/peach-goma-sparkle-gif-11975191960342404712">Happy Cat</a></div>
   <h1>YAYYYY 💖🎉</h1>
   <p>I knew it 😌</p>
   <p>Screenshot this & send it to me 😏📸</p>
 </div>
+
+<script type="text/javascript" async src="https://tenor.com/embed.js"></script>
 
 <script>
   const intro = document.getElementById("intro");
   const startBtn = document.getElementById("start");
   const questionBox = document.getElementById("questionBox");
   const question = document.getElementById("question");
-  const moodGif = document.getElementById("moodGif");
+  const gNormal = document.getElementById("gif-normal");
+  const gKnife = document.getElementById("gif-knife");
+  const gShake = document.getElementById("gif-shake");
+  const gBreak = document.getElementById("gif-breakdown");
   const yesBtn = document.getElementById("yes");
   const noBtn = document.getElementById("no");
   const celebration = document.getElementById("celebration");
 
-  const msgs = [
-    "Are you sure? 😳",
-    "Think carefully… 🥺",
-    "My heart is watching 💔",
-    "Universe says YES 🌌",
-    "Stop joking now 😭",
-    "No is unavailable ❌"
-  ];
-
-  const sadGifs = [
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3eHpkZzR2eHpxbm94eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnB0PWEmZW1mPTAmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PXM/m8f9sh8I7F5tO6Jm6t/giphy.gif", // Pleading
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNXA3eHpwZzR2eHpxbm94eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnB0PWEmZW1mPTAmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PXM/OPWNcr42GEvMk/giphy.gif", // Crying
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnYxeHpwZzR2eHpxbm94eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnB0PWEmZW1mPTAmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PXM/3o7TKVUn7iM8FMEU24/giphy.gif"  // Very Sad
-  ];
-
+  const msgs = ["Are you sure? 😳", "Think carefully… 🥺", "My heart is watching 💔", "Universe says YES 🌌", "Stop joking now 😭", "No is unavailable ❌"];
   let i = 0;
 
   startBtn.onclick = () => {
-    navigator.vibrate?.(50);
     intro.classList.add("hidden");
     questionBox.classList.remove("hidden");
+    // Initial position for NO button so it doesn't jump weirdly the first time
+    noBtn.style.position = "absolute";
   };
 
   function moveNo() {
-    // Update text
     question.textContent = msgs[Math.min(i, msgs.length - 1)];
     
-    // Switch GIFs as they keep clicking No
-    if (i === 1) moodGif.src = sadGifs[1]; // Start crying
-    if (i === 3) moodGif.src = sadGifs[2]; // Throw a tantrum
-    
+    if (i === 0) { gNormal.classList.add("hidden"); gKnife.classList.remove("hidden"); }
+    else if (i === 1) { gKnife.classList.add("hidden"); gShake.classList.remove("hidden"); }
+    else if (i === 2) { gShake.classList.add("hidden"); gBreak.classList.remove("hidden"); }
+
     i++;
+    navigator.vibrate?.([50, 50]);
 
-    navigator.vibrate?.([100, 50, 100]);
+    // PADDING ensures the button doesn't go off the screen edges
+    const padding = 20;
+    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
-    // Move button to random location
-    const padding = 120;
-    const x = Math.random() * (window.innerWidth - padding);
-    const y = Math.random() * (window.innerHeight - padding);
-    
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
+    const randomX = Math.max(padding, Math.random() * maxX);
+    const randomY = Math.max(padding, Math.random() * maxY);
 
-    // Shrink button
-    if (i > 4) noBtn.style.transform = "scale(0.7)";
-    if (i > 5) noBtn.style.display = "none"; // Vanish!
+    noBtn.style.left = randomX + "px";
+    noBtn.style.top = randomY + "px";
+
+    // Yes button growth (Limited so it doesn't break the layout)
+    const scale = Math.min(1 + i * 0.2, 2.5);
+    yesBtn.style.transform = `scale(${scale})`;
+
+    if (i > 6) noBtn.style.display = "none";
   }
 
-  noBtn.onmouseover = moveNo;
-  noBtn.onclick = moveNo;
+  // Mobile & Desktop support
+  noBtn.addEventListener('mouseover', moveNo);
+  noBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // Prevents clicking the button on mobile
+    moveNo();
+  });
 
   yesBtn.onclick = () => {
-    navigator.vibrate?.([200, 100, 200, 100, 300]);
     questionBox.classList.add("hidden");
     celebration.classList.remove("hidden");
     hearts();
   };
 
   function hearts() {
-    for (let j = 0; j < 30; j++) {
+    for (let j = 0; j < 25; j++) {
       const h = document.createElement("div");
       h.className = "heart";
       h.textContent = "💖";
       h.style.left = Math.random() * 100 + "vw";
-      h.style.bottom = "-20px";
+      h.style.bottom = "-50px";
       h.style.animationDelay = Math.random() * 2 + "s";
       document.body.appendChild(h);
       setTimeout(() => h.remove(), 4000);
